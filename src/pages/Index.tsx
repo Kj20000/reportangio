@@ -4,22 +4,31 @@ import { ReportHeader } from "@/components/ReportHeader";
 import { PatientInfoSection } from "@/components/PatientInfoSection";
 import { ProcedureDetailsSection } from "@/components/ProcedureDetailsSection";
 import { CoronaryFindingsSection } from "@/components/CoronaryFindingsSection";
+import { PeripheralFindingsSection } from "@/components/PeripheralFindingsSection";
+import { RenalFindingsSection } from "@/components/RenalFindingsSection";
+import { CarotidFindingsSection } from "@/components/CarotidFindingsSection";
+import { AortagramFindingsSection } from "@/components/AortagramFindingsSection";
 import { ConclusionSection } from "@/components/ConclusionSection";
 import { ReportPreview } from "@/components/ReportPreview";
 import { toast } from "sonner";
 import { Save, Upload, RefreshCw, Eye, FileText } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Activity } from "lucide-react";
 
 const Index = () => {
   const [formData, setFormData] = useState<any>({
     reportDate: new Date().toISOString().split("T")[0],
+    angiogramType: "CAG",
   });
 
   const [showPreview, setShowPreview] = useState(false);
 
   // Load draft from localStorage on mount
   useEffect(() => {
-    const savedDraft = localStorage.getItem("coronaryReportDraft");
+    const savedDraft = localStorage.getItem(`angiogramReportDraft-${formData.angiogramType}`);
     if (savedDraft) {
       try {
         const parsed = JSON.parse(savedDraft);
@@ -29,12 +38,12 @@ const Index = () => {
         console.error("Error loading draft:", error);
       }
     }
-  }, []);
+  }, [formData.angiogramType]);
 
   // Auto-save to localStorage
   useEffect(() => {
     const timer = setTimeout(() => {
-      localStorage.setItem("coronaryReportDraft", JSON.stringify(formData));
+      localStorage.setItem(`angiogramReportDraft-${formData.angiogramType}`, JSON.stringify(formData));
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -45,17 +54,71 @@ const Index = () => {
   };
 
   const fillNormalValues = () => {
-    setFormData((prev: any) => ({
-      ...prev,
+    const baseNormal = {
       origin: "Normal",
-      dominance: "Right dominant",
-      leftMain: "Normal",
-      lad: "Normal",
-      lcx: "Normal",
-      rca: "Normal",
-      conclusion: "Normal coronary arteries with no significant stenosis.",
+      conclusion: "Normal findings.",
       advice: "Continue medical management. Regular follow-up as advised.",
-    }));
+    };
+
+    if (formData.angiogramType === "CAG") {
+      setFormData((prev: any) => ({
+        ...prev,
+        ...baseNormal,
+        dominance: "Right dominant",
+        leftMain: "Normal",
+        ladLesion1: "Normal",
+        ladLesion2: "",
+        diagonal: "Normal",
+        lcxLesion1: "Normal",
+        lcxLesion2: "",
+        om1: "Normal",
+        om2: "Normal",
+        rcaLesion1: "Normal",
+        rcaLesion2: "",
+        pda: "Normal",
+        plv: "Normal",
+        conclusion: "Normal coronary arteries with no significant stenosis.",
+      }));
+    } else if (formData.angiogramType === "PAG") {
+      setFormData((prev: any) => ({
+        ...prev,
+        ...baseNormal,
+        laterality: "Bilateral",
+        aorta: "Normal",
+        iliac: "Normal",
+        femoral: "Normal",
+        popliteal: "Normal",
+        conclusion: "Normal peripheral arteries with no significant stenosis.",
+      }));
+    } else if (formData.angiogramType === "RAG") {
+      setFormData((prev: any) => ({
+        ...prev,
+        ...baseNormal,
+        laterality: "Bilateral",
+        renalArtery: "Normal",
+        renalBranches: "Normal",
+        conclusion: "Normal renal arteries with no significant stenosis.",
+      }));
+    } else if (formData.angiogramType === "CAROTID") {
+      setFormData((prev: any) => ({
+        ...prev,
+        ...baseNormal,
+        laterality: "Bilateral",
+        commonCarotid: "Normal",
+        internalCarotid: "Normal",
+        externalCarotid: "Normal",
+        conclusion: "Normal carotid arteries with no significant stenosis.",
+      }));
+    } else if (formData.angiogramType === "AORTAGRAM") {
+      setFormData((prev: any) => ({
+        ...prev,
+        ...baseNormal,
+        aortaType: "Thoracoabdominal",
+        thoracicAorta: "Normal",
+        abdominalAorta: "Normal",
+        conclusion: "Normal aorta with no significant abnormalities.",
+      }));
+    }
 
     toast.success("Form filled with normal values");
   };
@@ -66,7 +129,7 @@ const Index = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `coronary-report-draft-${Date.now()}.json`;
+    link.download = `${formData.angiogramType}-report-draft-${Date.now()}.json`;
     link.click();
     URL.revokeObjectURL(url);
 
@@ -103,8 +166,8 @@ const Index = () => {
 
   const clearForm = () => {
     if (confirm("Are you sure you want to clear all data?")) {
-      setFormData({ reportDate: new Date().toISOString().split("T")[0] });
-      localStorage.removeItem("coronaryReportDraft");
+      setFormData({ reportDate: new Date().toISOString().split("T")[0], angiogramType: formData.angiogramType });
+      localStorage.removeItem(`angiogramReportDraft-${formData.angiogramType}`);
       toast.success("Form cleared");
     }
   };
@@ -134,6 +197,32 @@ const Index = () => {
             </TabsList>
 
             <TabsContent value="form" className="space-y-6">
+              <Card className="border-primary/20 shadow-sm hover:shadow-md transition-shadow">
+                <CardHeader className="bg-accent/50">
+                  <CardTitle className="flex items-center gap-2 text-primary">
+                    <Activity className="h-5 w-5" />
+                    Angiogram Type
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="angiogramType">Select Angiogram Type</Label>
+                    <Select value={formData.angiogramType || "CAG"} onValueChange={(value) => updateFormData("angiogramType", value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select angiogram type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="CAG">Coronary Angiogram (CAG)</SelectItem>
+                        <SelectItem value="PAG">Peripheral Angiogram (PAG)</SelectItem>
+                        <SelectItem value="RAG">Renal Angiogram (RAG)</SelectItem>
+                        <SelectItem value="CAROTID">Carotid Angiogram</SelectItem>
+                        <SelectItem value="AORTAGRAM">Aortagram</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
+
               <PatientInfoSection
                 formData={formData}
                 updateFormData={updateFormData}
@@ -144,10 +233,40 @@ const Index = () => {
                 updateFormData={updateFormData}
               />
 
-              <CoronaryFindingsSection
-                formData={formData}
-                updateFormData={updateFormData}
-              />
+              {formData.angiogramType === "CAG" && (
+                <CoronaryFindingsSection
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              )}
+
+              {formData.angiogramType === "PAG" && (
+                <PeripheralFindingsSection
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              )}
+
+              {formData.angiogramType === "RAG" && (
+                <RenalFindingsSection
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              )}
+
+              {formData.angiogramType === "CAROTID" && (
+                <CarotidFindingsSection
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              )}
+
+              {formData.angiogramType === "AORTAGRAM" && (
+                <AortagramFindingsSection
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
+              )}
 
               <ConclusionSection
                 formData={formData}

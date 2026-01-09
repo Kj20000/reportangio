@@ -13,9 +13,17 @@ interface CoronaryFindingsProps {
 export const CoronaryFindingsSection = ({ formData, updateFormData }: CoronaryFindingsProps) => {
   const [customFields, setCustomFields] = useState({
     leftMain: false,
-    lad: false,
-    lcx: false,
-    rca: false,
+    ladLesion1: false,
+    ladLesion2: false,
+    diagonal: false,
+    lcxLesion1: false,
+    lcxLesion2: false,
+    om1: false,
+    om2: false,
+    rcaLesion1: false,
+    rcaLesion2: false,
+    pda: false,
+    plv: false,
   });
 
   const handleSelectChange = (field: string, value: string) => {
@@ -91,76 +99,277 @@ export const CoronaryFindingsSection = ({ formData, updateFormData }: CoronaryFi
 
           <div className="space-y-2">
             <Label htmlFor="lad">LAD (Left Anterior Descending)</Label>
-            <Select value={formData.lad || ""} onValueChange={(value) => handleSelectChange("lad", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select finding" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Normal">Normal</SelectItem>
-                <SelectItem value="Proximal 90% stenosis, TIMI 3">Proximal 90% stenosis, TIMI 3</SelectItem>
-                <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
-                <SelectItem value="Diffuse 50% disease">Diffuse 50% disease</SelectItem>
-                <SelectItem value="Ostial 80% stenosis">Ostial 80% stenosis</SelectItem>
-                <SelectItem value="Acute thrombus in LAD">Acute thrombus in LAD</SelectItem>
-                <SelectItem value="Custom">Custom</SelectItem>
-              </SelectContent>
-            </Select>
-            {customFields.lad && (
-              <Input
-                placeholder="Enter custom LAD finding"
-                value={formData.ladCustom || ""}
-                onChange={(e) => updateFormData("ladCustom", e.target.value)}
-                className="mt-2"
-              />
-            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="space-y-2">
+                <Label htmlFor="ladLesion1">Lesion 1</Label>
+                <Select value={formData.ladLesion1 || ""} onValueChange={(value) => handleSelectChange("ladLesion1", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select finding" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Proximal 90% stenosis, TIMI 3">Proximal 90% stenosis, TIMI 3</SelectItem>
+                    <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
+                    <SelectItem value="Diffuse 50% disease">Diffuse 50% disease</SelectItem>
+                    <SelectItem value="Ostial 80% stenosis">Ostial 80% stenosis</SelectItem>
+                    <SelectItem value="Acute thrombus in LAD">Acute thrombus in LAD</SelectItem>
+                    <SelectItem value="Custom">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+                {customFields.ladLesion1 && (
+                  <Input
+                    placeholder="Enter custom LAD lesion 1 finding"
+                    value={formData.ladLesion1Custom || ""}
+                    onChange={(e) => updateFormData("ladLesion1Custom", e.target.value)}
+                    className="mt-2"
+                  />
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ladLesion2">Lesion 2</Label>
+                <Select value={formData.ladLesion2 || ""} onValueChange={(value) => handleSelectChange("ladLesion2", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select finding" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Proximal 90% stenosis, TIMI 3">Proximal 90% stenosis, TIMI 3</SelectItem>
+                    <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
+                    <SelectItem value="Diffuse 50% disease">Diffuse 50% disease</SelectItem>
+                    <SelectItem value="Ostial 80% stenosis">Ostial 80% stenosis</SelectItem>
+                    <SelectItem value="Acute thrombus in LAD">Acute thrombus in LAD</SelectItem>
+                    <SelectItem value="Custom">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+                {customFields.ladLesion2 && (
+                  <Input
+                    placeholder="Enter custom LAD lesion 2 finding"
+                    value={formData.ladLesion2Custom || ""}
+                    onChange={(e) => updateFormData("ladLesion2Custom", e.target.value)}
+                    className="mt-2"
+                  />
+                )}
+              </div>
+            </div>
+            <div className="space-y-2 mt-2">
+              <Label htmlFor="diagonal">Diagonal Branch</Label>
+              <Select value={formData.diagonal || ""} onValueChange={(value) => handleSelectChange("diagonal", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select finding" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Normal">Normal</SelectItem>
+                  <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
+                  <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
+                  <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
+                  <SelectItem value="Custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
+              {customFields.diagonal && (
+                <Input
+                  placeholder="Enter custom diagonal finding"
+                  value={formData.diagonalCustom || ""}
+                  onChange={(e) => updateFormData("diagonalCustom", e.target.value)}
+                  className="mt-2"
+                />
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="lcx">LCx (Left Circumflex)</Label>
-            <Select value={formData.lcx || ""} onValueChange={(value) => handleSelectChange("lcx", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select finding" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Normal">Normal</SelectItem>
-                <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
-                <SelectItem value="OM branch 70%">OM branch 70%</SelectItem>
-                <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
-                <SelectItem value="Custom">Custom</SelectItem>
-              </SelectContent>
-            </Select>
-            {customFields.lcx && (
-              <Input
-                placeholder="Enter custom LCx finding"
-                value={formData.lcxCustom || ""}
-                onChange={(e) => updateFormData("lcxCustom", e.target.value)}
-                className="mt-2"
-              />
-            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="space-y-2">
+                <Label htmlFor="lcxLesion1">Lesion 1</Label>
+                <Select value={formData.lcxLesion1 || ""} onValueChange={(value) => handleSelectChange("lcxLesion1", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select finding" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
+                    <SelectItem value="OM branch 70%">OM branch 70%</SelectItem>
+                    <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
+                    <SelectItem value="Custom">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+                {customFields.lcxLesion1 && (
+                  <Input
+                    placeholder="Enter custom LCx lesion 1 finding"
+                    value={formData.lcxLesion1Custom || ""}
+                    onChange={(e) => updateFormData("lcxLesion1Custom", e.target.value)}
+                    className="mt-2"
+                  />
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lcxLesion2">Lesion 2</Label>
+                <Select value={formData.lcxLesion2 || ""} onValueChange={(value) => handleSelectChange("lcxLesion2", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select finding" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
+                    <SelectItem value="OM branch 70%">OM branch 70%</SelectItem>
+                    <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
+                    <SelectItem value="Custom">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+                {customFields.lcxLesion2 && (
+                  <Input
+                    placeholder="Enter custom LCx lesion 2 finding"
+                    value={formData.lcxLesion2Custom || ""}
+                    onChange={(e) => updateFormData("lcxLesion2Custom", e.target.value)}
+                    className="mt-2"
+                  />
+                )}
+              </div>
+            </div>
+            <div className="space-y-2 mt-2">
+              <Label htmlFor="om1">OM1 Branch</Label>
+              <Select value={formData.om1 || ""} onValueChange={(value) => handleSelectChange("om1", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select finding" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Normal">Normal</SelectItem>
+                  <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
+                  <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
+                  <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
+                  <SelectItem value="Custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
+              {customFields.om1 && (
+                <Input
+                  placeholder="Enter custom OM1 finding"
+                  value={formData.om1Custom || ""}
+                  onChange={(e) => updateFormData("om1Custom", e.target.value)}
+                  className="mt-2"
+                />
+              )}
+            </div>
+            <div className="space-y-2 mt-2">
+              <Label htmlFor="om2">OM2 Branch</Label>
+              <Select value={formData.om2 || ""} onValueChange={(value) => handleSelectChange("om2", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select finding" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Normal">Normal</SelectItem>
+                  <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
+                  <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
+                  <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
+                  <SelectItem value="Custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
+              {customFields.om2 && (
+                <Input
+                  placeholder="Enter custom OM2 finding"
+                  value={formData.om2Custom || ""}
+                  onChange={(e) => updateFormData("om2Custom", e.target.value)}
+                  className="mt-2"
+                />
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="rca">RCA (Right Coronary Artery)</Label>
-            <Select value={formData.rca || ""} onValueChange={(value) => handleSelectChange("rca", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select finding" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Normal">Normal</SelectItem>
-                <SelectItem value="Proximal 70% stenosis">Proximal 70% stenosis</SelectItem>
-                <SelectItem value="Mid 90% stenosis">Mid 90% stenosis</SelectItem>
-                <SelectItem value="Diffuse atherosclerotic disease">Diffuse atherosclerotic disease</SelectItem>
-                <SelectItem value="Custom">Custom</SelectItem>
-              </SelectContent>
-            </Select>
-            {customFields.rca && (
-              <Input
-                placeholder="Enter custom RCA finding"
-                value={formData.rcaCustom || ""}
-                onChange={(e) => updateFormData("rcaCustom", e.target.value)}
-                className="mt-2"
-              />
-            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="space-y-2">
+                <Label htmlFor="rcaLesion1">Lesion 1</Label>
+                <Select value={formData.rcaLesion1 || ""} onValueChange={(value) => handleSelectChange("rcaLesion1", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select finding" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Proximal 70% stenosis">Proximal 70% stenosis</SelectItem>
+                    <SelectItem value="Mid 90% stenosis">Mid 90% stenosis</SelectItem>
+                    <SelectItem value="Diffuse atherosclerotic disease">Diffuse atherosclerotic disease</SelectItem>
+                    <SelectItem value="Custom">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+                {customFields.rcaLesion1 && (
+                  <Input
+                    placeholder="Enter custom RCA lesion 1 finding"
+                    value={formData.rcaLesion1Custom || ""}
+                    onChange={(e) => updateFormData("rcaLesion1Custom", e.target.value)}
+                    className="mt-2"
+                  />
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rcaLesion2">Lesion 2</Label>
+                <Select value={formData.rcaLesion2 || ""} onValueChange={(value) => handleSelectChange("rcaLesion2", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select finding" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Normal">Normal</SelectItem>
+                    <SelectItem value="Proximal 70% stenosis">Proximal 70% stenosis</SelectItem>
+                    <SelectItem value="Mid 90% stenosis">Mid 90% stenosis</SelectItem>
+                    <SelectItem value="Diffuse atherosclerotic disease">Diffuse atherosclerotic disease</SelectItem>
+                    <SelectItem value="Custom">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+                {customFields.rcaLesion2 && (
+                  <Input
+                    placeholder="Enter custom RCA lesion 2 finding"
+                    value={formData.rcaLesion2Custom || ""}
+                    onChange={(e) => updateFormData("rcaLesion2Custom", e.target.value)}
+                    className="mt-2"
+                  />
+                )}
+              </div>
+            </div>
+            <div className="space-y-2 mt-2">
+              <Label htmlFor="pda">PDA Branch</Label>
+              <Select value={formData.pda || ""} onValueChange={(value) => handleSelectChange("pda", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select finding" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Normal">Normal</SelectItem>
+                  <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
+                  <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
+                  <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
+                  <SelectItem value="Custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
+              {customFields.pda && (
+                <Input
+                  placeholder="Enter custom PDA finding"
+                  value={formData.pdaCustom || ""}
+                  onChange={(e) => updateFormData("pdaCustom", e.target.value)}
+                  className="mt-2"
+                />
+              )}
+            </div>
+            <div className="space-y-2 mt-2">
+              <Label htmlFor="plv">PLV Branch</Label>
+              <Select value={formData.plv || ""} onValueChange={(value) => handleSelectChange("plv", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select finding" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Normal">Normal</SelectItem>
+                  <SelectItem value="Proximal 80% stenosis">Proximal 80% stenosis</SelectItem>
+                  <SelectItem value="Mid 70% stenosis">Mid 70% stenosis</SelectItem>
+                  <SelectItem value="Diffuse disease">Diffuse disease</SelectItem>
+                  <SelectItem value="Custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
+              {customFields.plv && (
+                <Input
+                  placeholder="Enter custom PLV finding"
+                  value={formData.plvCustom || ""}
+                  onChange={(e) => updateFormData("plvCustom", e.target.value)}
+                  className="mt-2"
+                />
+              )}
+            </div>
           </div>
         </div>
       </CardContent>
